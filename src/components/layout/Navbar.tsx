@@ -57,7 +57,7 @@ export default function Navbar({ onCommandPalette }: NavbarProps) {
               <img src={profilePic} alt={CONFIG.name} className="w-full h-full rounded-full object-cover" />
             </div>
             <span className="font-['Syne'] font-700 text-white hidden sm:block">
-              {CONFIG.name.split(' ')[0]}
+              {CONFIG.name}
               <span className="text-gradient">.</span>
             </span>
           </motion.button>
