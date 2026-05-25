@@ -4,6 +4,7 @@ import { Menu, X, Download, Terminal } from 'lucide-react';
 import { NAV_ITEMS, CONFIG } from '../../constants';
 import { useScrollProgress } from '../../hooks';
 import profilePic from '../../pic/pic.png';
+import resumeUrl from '../../resume/myresume.pdf?url';
 
 interface NavbarProps {
   onCommandPalette: () => void;
@@ -94,8 +95,8 @@ export default function Navbar({ onCommandPalette }: NavbarProps) {
             </motion.button>
 
             <motion.a
-              href="#contact"
-              onClick={(e) => { e.preventDefault(); handleNavClick('#contact'); }}
+              href={resumeUrl}
+              download="Lakshmi_Narasimhan_Resume.pdf"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0 }}

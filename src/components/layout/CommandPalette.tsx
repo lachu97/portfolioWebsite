@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ArrowRight, ExternalLink, Mail, Code2, Terminal } from 'lucide-react';
+import { Search, ArrowRight, ExternalLink, Mail, Code2, Terminal, Download } from 'lucide-react';
 import { NAV_ITEMS, CONFIG } from '../../constants';
+import resumeUrl from '../../resume/myresume.pdf?url';
 
 interface CommandItem {
   label: string;
@@ -40,6 +41,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
         { label: 'GitHub Profile', icon: Code2, action: () => window.open(`https://github.com/${CONFIG.GITHUB_USERNAME}`, '_blank'), shortcut: 'G' },
         { label: 'LinkedIn', icon: ExternalLink, action: () => window.open(CONFIG.LINKEDIN_URL, '_blank'), shortcut: 'L' },
         { label: 'Send Email', icon: Mail, action: () => window.open(`mailto:${CONFIG.EMAIL}`, '_blank'), shortcut: 'E' },
+        { label: 'Download Resume', icon: Download, action: () => { const a = document.createElement('a'); a.href = resumeUrl; a.download = 'Lakshmi_Narasimhan_Resume.pdf'; a.click(); }, shortcut: 'R' },
       ],
     },
   ];

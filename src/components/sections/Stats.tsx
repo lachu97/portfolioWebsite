@@ -7,11 +7,13 @@ import { Code2, Trophy, Zap, Target, TrendingUp } from 'lucide-react';
 function StatCounter({ value, suffix, label }: { value: number; suffix: string; label: string; }) {
   const { ref, inView } = useInView(0.3);
   const count = useCounter(value, 2000, inView);
+  const atMax = count >= value;
+  const display = atMax ? `${value}${suffix}` : `${count}${suffix.replace(/^\.\d+/, '')}`;
 
   return (
     <div ref={ref} className="gradient-border-card p-6 text-center">
       <div className="font-['Syne'] font-800 text-3xl md:text-4xl text-white mb-1">
-        {count.toLocaleString()}{suffix}
+        {display}
       </div>
       <div className="font-['DM_Sans'] text-sm text-[var(--text-muted)]">{label}</div>
     </div>
