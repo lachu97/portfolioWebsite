@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from '../../hooks';
 import { CONFIG } from '../../constants';
-import { Mail, Code2, Link2, ExternalLink, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Code2, Link2, ExternalLink, Send, CheckCircle, AlertCircle, Download } from 'lucide-react';
+import resumeUrl from '../../resume/myresume.pdf?url';
 
 const SOCIALS = [
   {
@@ -185,6 +186,29 @@ export default function Contact() {
                 <ExternalLink size={14} className="text-[var(--text-muted)] group-hover:text-white transition-colors" />
               </motion.a>
             ))}
+
+            {/* Resume download */}
+            <motion.a
+              href={resumeUrl}
+              download="Lakshmi_Narasimhan_Resume.pdf"
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.4, delay: 0.4 + SOCIALS.length * 0.1 }}
+              whileHover={{ scale: 1.02, boxShadow: '0 20px 60px rgba(99,102,241,0.3)', transition: { duration: 0.2 } }}
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center justify-between p-4 rounded-xl border border-indigo-500/30 bg-gradient-to-r from-indigo-600/10 to-violet-600/10 hover:from-indigo-600/20 hover:to-violet-600/20 transition-all duration-200 group mt-2"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-2.5 rounded-lg bg-indigo-500/15">
+                  <Download size={20} className="text-indigo-400" />
+                </div>
+                <div>
+                  <div className="font-['DM_Sans'] font-500 text-white text-sm">Download Resume</div>
+                  <div className="font-['DM_Mono'] text-xs text-[var(--text-muted)]">Lakshmi_Narasimhan_Resume.pdf</div>
+                </div>
+              </div>
+              <span className="font-['DM_Mono'] text-xs text-indigo-400 group-hover:text-white transition-colors">PDF →</span>
+            </motion.a>
           </motion.div>
         </div>
       </div>
