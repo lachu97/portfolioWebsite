@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import { useInView } from '../../hooks';
 import { CONFIG } from '../../constants';
 import { Mail, Code2, Link2, ExternalLink, Send, CheckCircle, AlertCircle, Download } from 'lucide-react';
 import resumeUrl from '../../resume/myresume.pdf?url';
+
+const EMAILJS_SERVICE_ID = 'service_3z3czpo';
+const EMAILJS_TEMPLATE_AUTOREPLY = 'template_0blycz9';
+const EMAILJS_TEMPLATE_NOTIFY = 'template_ab0gttn';
+const EMAILJS_PUBLIC_KEY = 'Y5FWjqWwEg7Cw8xEe';
 
 const SOCIALS = [
   {
@@ -54,13 +60,19 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormState('sending');
-    const subject = encodeURIComponent(`Portfolio contact from ${form.name}`);
-    const body = encodeURIComponent(`From: ${form.name} <${form.email}>\n\n${form.message}`);
-    window.location.href = `mailto:${CONFIG.EMAIL}?subject=${subject}&body=${body}`;
-    await new Promise(r => setTimeout(r, 800));
-    setFormState('success');
-    setForm({ name: '', email: '', message: '' });
-    setTimeout(() => setFormState('idle'), 5000);
+    try {
+      const payload = { name: form.name, email: form.email, message: form.message, title: `Message from ${form.name}` };
+      await Promise.all([
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_NOTIFY, payload, EMAILJS_PUBLIC_KEY),
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_AUTOREPLY, payload, EMAILJS_PUBLIC_KEY),
+      ]);
+      setFormState('success');
+      setForm({ name: '', email: '', message: '' });
+      setTimeout(() => setFormState('idle'), 5000);
+    } catch {
+      setFormState('error');
+      setTimeout(() => setFormState('idle'), 4000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
