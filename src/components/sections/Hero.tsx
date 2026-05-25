@@ -1,9 +1,24 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
-import { ArrowDown, Code2, Link2, Mail, Sparkles, ChevronRight } from 'lucide-react';
+import { ArrowDown, Code2, Link2, Mail, Sparkles, ChevronRight, Smartphone, Zap, Shield, Clock } from 'lucide-react';
 import { CONFIG } from '../../constants';
 import { useMousePosition } from '../../hooks';
+
+const METRICS = [
+  { icon: Smartphone, value: '100K+', label: 'App Installs' },
+  { icon: Shield,     value: '99.8%', label: 'Crash-free' },
+  { icon: Zap,        value: '~35%',  label: 'Faster JS Thread' },
+  { icon: Clock,      value: '4 Yrs', label: 'Mobile Experience' },
+];
+
+const ORBS = [
+  { width: 600, height: 600, color: 'rgba(99,102,241,0.18)',  top: '-10%', left: '-15%',   dur: 14, x: [0, 60, -30, 0],  y: [0, -40, 30, 0]  },
+  { width: 500, height: 500, color: 'rgba(139,92,246,0.14)',  top: '10%',  right: '-10%',  dur: 18, x: [0, -50, 20, 0],  y: [0, 30, -50, 0]  },
+  { width: 400, height: 400, color: 'rgba(6,182,212,0.10)',   bottom: '5%',left: '30%',    dur: 22, x: [0, 40, -60, 0],  y: [0, -30, 20, 0]  },
+  { width: 350, height: 350, color: 'rgba(245,158,11,0.07)',  top: '40%',  left: '10%',    dur: 16, x: [0, -30, 50, 0],  y: [0, 40, -30, 0]  },
+  { width: 300, height: 300, color: 'rgba(236,72,153,0.07)',  bottom:'20%',right:'15%',    dur: 20, x: [0, 30, -20, 0],  y: [0, -20, 40, 0]  },
+];
 
 export default function Hero() {
   const { x, y } = useMousePosition();
@@ -18,16 +33,28 @@ export default function Hero() {
 
   return (
     <section ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* Cursor glow that follows mouse */}
-      <div
-        className="cursor-glow"
-        style={{ left: x, top: y, opacity: 0.7 }}
-      />
+      {/* Cursor glow */}
+      <div className="cursor-glow" style={{ left: x, top: y, opacity: 0.7 }} />
 
-      {/* Ambient orbs */}
-      <div className="orb w-[500px] h-[500px] bg-indigo-600/20 top-0 -left-40" style={{ animationDelay: '0s' }} />
-      <div className="orb w-[400px] h-[400px] bg-violet-600/15 top-20 right-0" style={{ animationDelay: '2s' }} />
-      <div className="orb w-[300px] h-[300px] bg-cyan-600/10 bottom-20 left-1/3" style={{ animationDelay: '4s' }} />
+      {/* Animated gradient orbs */}
+      {ORBS.map((orb, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: orb.width,
+            height: orb.height,
+            background: orb.color,
+            filter: 'blur(80px)',
+            top: orb.top,
+            left: orb.left,
+            right: (orb as any).right,
+            bottom: (orb as any).bottom,
+          }}
+          animate={{ x: orb.x, y: orb.y }}
+          transition={{ duration: orb.dur, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
+        />
+      ))}
 
       {/* Grid pattern */}
       <div className="absolute inset-0 opacity-[0.03]"
@@ -53,16 +80,8 @@ export default function Hero() {
             top: `${Math.random() * 100}%`,
             opacity: Math.random() * 0.6 + 0.2,
           }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.8, 0.2],
-          }}
-          transition={{
-            duration: Math.random() * 4 + 3,
-            delay: Math.random() * 4,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          animate={{ y: [0, -30, 0], opacity: [0.2, 0.8, 0.2] }}
+          transition={{ duration: Math.random() * 4 + 3, delay: Math.random() * 4, repeat: Infinity, ease: 'easeInOut' }}
         />
       ))}
 
@@ -150,7 +169,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-4 mb-16"
+          className="flex flex-wrap items-center justify-center gap-4 mb-10"
         >
           <motion.button
             onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
@@ -173,11 +192,33 @@ export default function Hero() {
           </motion.a>
         </motion.div>
 
+        {/* Mobile metrics banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.48 }}
+          className="flex flex-wrap items-center justify-center gap-3 mb-10"
+        >
+          {METRICS.map(({ icon: Icon, value, label }, i) => (
+            <motion.div
+              key={label}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.5 + i * 0.07 }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl glass border border-[rgba(99,102,241,0.2)] group hover:border-indigo-500/40 transition-all duration-200"
+            >
+              <Icon size={14} className="text-indigo-400 shrink-0" />
+              <span className="font-['Syne'] font-700 text-white text-sm">{value}</span>
+              <span className="font-['DM_Mono'] text-xs text-[var(--text-muted)]">{label}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+
         {/* Social links */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.45 }}
+          transition={{ delay: 0.55 }}
           className="flex items-center justify-center gap-6"
         >
           {[

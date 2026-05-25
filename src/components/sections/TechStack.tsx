@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from '../../hooks';
 import { TECH_STACK } from '../../constants';
+import TiltCard from '../ui/TiltCard';
 import {
   SiReact, SiTypescript, SiJavascript, SiKotlin, SiSwift, SiAndroid, SiApple,
   SiRedux, SiReactquery, SiTailwindcss,
@@ -55,9 +56,12 @@ export default function TechStack() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                       transition={{ duration: 0.4, delay: catIdx * 0.05 + i * 0.04 + 0.2, ease: [0.16, 1, 0.3, 1] as any }}
-                      whileHover={{ scale: 1.06, y: -6 }}
-                      className="gradient-border-card p-5 flex flex-col items-center gap-3 cursor-default group"
                     >
+                      <TiltCard
+                        className="gradient-border-card p-5 flex flex-col items-center gap-3 cursor-default group"
+                        glowColor={tech.color}
+                        maxTilt={10}
+                      >
                       <div
                         className="w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                         style={{
@@ -73,6 +77,7 @@ export default function TechStack() {
                       <span className="font-['DM_Sans'] text-sm font-500 text-[var(--text-secondary)] group-hover:text-white transition-colors text-center leading-tight">
                         {tech.name}
                       </span>
+                      </TiltCard>
                     </motion.div>
                   );
                 })}

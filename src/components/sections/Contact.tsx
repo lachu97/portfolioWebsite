@@ -15,7 +15,7 @@ const SOCIALS = [
   },
   {
     label: 'LinkedIn',
-    handle: 'alexrivera-dev',
+    handle: 'lakshminarasimhan-rn',
     href: CONFIG.LINKEDIN_URL,
     icon: Link2,
     color: '#0A66C2',
@@ -53,8 +53,10 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormState('sending');
-    // Simulate form submission (replace with actual endpoint)
-    await new Promise(r => setTimeout(r, 1500));
+    const subject = encodeURIComponent(`Portfolio contact from ${form.name}`);
+    const body = encodeURIComponent(`From: ${form.name} <${form.email}>\n\n${form.message}`);
+    window.location.href = `mailto:${CONFIG.EMAIL}?subject=${subject}&body=${body}`;
+    await new Promise(r => setTimeout(r, 800));
     setFormState('success');
     setForm({ name: '', email: '', message: '' });
     setTimeout(() => setFormState('idle'), 5000);
@@ -83,7 +85,7 @@ export default function Contact() {
             <span className="text-gradient"> great</span>
           </h2>
           <p className="text-[var(--text-secondary)] font-['DM_Sans'] text-lg max-w-xl mx-auto">
-            Open to senior engineering roles, consulting, and interesting open source collaborations.
+            Open to React Native / mobile engineering roles, contracts, and interesting open source collaborations.
           </p>
         </motion.div>
 

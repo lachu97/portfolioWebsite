@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Download, Terminal } from 'lucide-react';
 import { NAV_ITEMS, CONFIG } from '../../constants';
 import { useScrollProgress } from '../../hooks';
+import profilePic from '../../pic/pic.png';
 
 interface NavbarProps {
   onCommandPalette: () => void;
@@ -51,8 +52,8 @@ export default function Navbar({ onCommandPalette }: NavbarProps) {
             whileTap={{ scale: 0.95 }}
             className="flex items-center gap-2 group"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm font-['Syne']">
-              LN
+            <div className="w-9 h-9 rounded-full p-[2px] bg-gradient-to-br from-indigo-500 to-violet-600 shrink-0">
+              <img src={profilePic} alt={CONFIG.name} className="w-full h-full rounded-full object-cover" />
             </div>
             <span className="font-['Syne'] font-700 text-white hidden sm:block">
               {CONFIG.name.split(' ')[0]}

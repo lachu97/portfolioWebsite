@@ -2,11 +2,19 @@ import { motion } from 'framer-motion';
 import { useInView } from '../../hooks';
 import { EXPERIENCE } from '../../constants';
 import { ExternalLink, Zap } from 'lucide-react';
+import TiltCard from '../ui/TiltCard';
 
 const LANG_COLORS: Record<string, string> = {
-  TypeScript: '#3178C6', JavaScript: '#F7DF1E', React: '#61DAFB',
-  Go: '#00ADD8', Python: '#FFD43B', Rust: '#CE422B',
-  'Ruby on Rails': '#CC0000', 'Next.js': '#ffffff', WebGL: '#990000',
+  TypeScript: '#3178C6', JavaScript: '#F7DF1E',
+  'React Native': '#61DAFB', React: '#61DAFB',
+  Kotlin: '#7F52FF', Swift: '#F05138',
+  Android: '#3DDC84', iOS: '#ffffff',
+  'Node.js': '#339933', Python: '#FFD43B',
+  FastAPI: '#009688', PostgreSQL: '#4169E1',
+  GraphQL: '#E10098',
+  Fastlane: '#e11d48', CodePush: '#0078D4',
+  Firebase: '#FFCA28', Crashlytics: '#FF6B35',
+  Docker: '#2496ED', 'GitHub Actions': '#2088FF',
 };
 
 export default function Experience() {
@@ -65,8 +73,12 @@ export default function Experience() {
                 </div>
 
                 {/* Card */}
-                <div className={`gradient-border-card p-6 transition-all duration-300 group-hover:border-indigo-500/40 ${exp.highlight ? 'glow-indigo' : ''}`}
-                  style={exp.highlight ? { boxShadow: '0 0 40px rgba(99,102,241,0.15)' } : {}}>
+                <TiltCard
+                  className={`gradient-border-card p-6 ${exp.highlight ? 'glow-indigo' : ''}`}
+                  glowColor={exp.highlight ? '#6366f1' : '#8b5cf6'}
+                  maxTilt={6}
+                  style={exp.highlight ? { boxShadow: '0 0 40px rgba(99,102,241,0.15)' } : {}}
+                >
                   
                   <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                     <div>
@@ -88,12 +100,12 @@ export default function Experience() {
                         <ExternalLink size={12} className="opacity-0 group-hover/link:opacity-100 transition-opacity" />
                       </a>
                     </div>
-                    <span className="font-['DM_Mono'] text-xs text-[var(--text-muted)] shrink-0 mt-1">
+                    <span className="font-['DM_Mono'] text-sm text-[var(--text-muted)] shrink-0 mt-1">
                       {exp.period}
                     </span>
                   </div>
 
-                  <p className="text-[var(--text-secondary)] font-['DM_Sans'] leading-relaxed text-sm mb-5">
+                  <p className="text-[var(--text-secondary)] font-['DM_Sans'] leading-relaxed text-base mb-5">
                     {exp.description}
                   </p>
 
@@ -101,7 +113,7 @@ export default function Experience() {
                     {exp.tech.map(tech => (
                       <span
                         key={tech}
-                        className="px-2.5 py-1 rounded-md text-xs font-['DM_Mono'] border"
+                        className="px-3 py-1.5 rounded-md text-sm font-['DM_Mono'] border"
                         style={{
                           background: `${LANG_COLORS[tech] || '#6366f1'}15`,
                           borderColor: `${LANG_COLORS[tech] || '#6366f1'}30`,
@@ -112,7 +124,7 @@ export default function Experience() {
                       </span>
                     ))}
                   </div>
-                </div>
+                </TiltCard>
               </motion.div>
             ))}
           </div>

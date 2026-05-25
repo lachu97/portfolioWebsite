@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="flex flex-col items-center md:items-start gap-3">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-xs font-['Syne']">
-                AR
+                LN
               </div>
               <span className="font-['Syne'] font-700 text-white">{CONFIG.name}</span>
             </div>

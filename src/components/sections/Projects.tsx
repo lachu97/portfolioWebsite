@@ -1,8 +1,33 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView, useGitHubRepos } from '../../hooks';
-import { Star, GitFork, ExternalLink, Code2, Search, AlertCircle } from 'lucide-react';
+import { Star, GitFork, ExternalLink, Code2, Search, AlertCircle, Package, Database, Lock } from 'lucide-react';
 import type { GitHubRepo } from '../../types';
+
+const FEATURED_PROJECTS = [
+  {
+    name: 'react-native-securekv',
+    tagline: 'Encrypted key-value storage for React Native',
+    description: 'Backed by Android Keystore and iOS Keychain. Drop-in secure storage for tokens and sensitive data. Published on npm and used in production apps.',
+    github: 'https://github.com/lachu97/react-native-securekv',
+    npm: 'https://npmjs.com/package/react-native-securekv',
+    tags: ['React Native', 'TypeScript', 'Android Keystore', 'iOS Keychain', 'npm'],
+    icon: Lock,
+    color: '#6366f1',
+    badge: 'npm package',
+  },
+  {
+    name: 'VectorDB',
+    tagline: 'Self-hosted vector search engine',
+    description: 'Multi-tenant vector database with REST APIs, auth, rate limiting, and a RAG pipeline. Sub-0.6ms p95 search via pgvector HNSW indexing. Fully Dockerized.',
+    github: 'https://github.com/lachu97/vector-db',
+    npm: null,
+    tags: ['Python', 'FastAPI', 'PostgreSQL', 'pgvector', 'Docker', 'React'],
+    icon: Database,
+    color: '#06b6d4',
+    badge: 'self-hosted',
+  },
+];
 
 const LANG_COLORS: Record<string, string> = {
   TypeScript: '#3178C6', JavaScript: '#F7DF1E', Python: '#3572A5',
@@ -163,6 +188,67 @@ export default function Projects() {
             </div>
           </div>
         </motion.div>
+
+        {/* Open source highlights */}
+        <div className="grid md:grid-cols-2 gap-5 mb-12">
+          {FEATURED_PROJECTS.map((proj, i) => {
+            const Icon = proj.icon;
+            return (
+              <motion.div
+                key={proj.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: i * 0.1 + 0.1 }}
+                className="gradient-border-card p-6 group flex flex-col gap-4"
+                style={{ background: `linear-gradient(135deg, ${proj.color}08 0%, rgba(10,15,30,0.9) 100%)` }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl" style={{ background: `${proj.color}18`, boxShadow: `0 0 0 1px ${proj.color}25` }}>
+                      <Icon size={20} style={{ color: proj.color }} />
+                    </div>
+                    <div>
+                      <span className="font-['DM_Mono'] text-xs px-2 py-0.5 rounded-full mb-1 inline-block"
+                        style={{ background: `${proj.color}18`, color: proj.color, border: `1px solid ${proj.color}30` }}>
+                        {proj.badge}
+                      </span>
+                      <h3 className="font-['Syne'] font-700 text-white text-lg group-hover:text-indigo-300 transition-colors">
+                        {proj.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    {proj.npm && (
+                      <a href={proj.npm} target="_blank" rel="noopener noreferrer"
+                        className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-orange-400 transition-colors"
+                        onClick={e => e.stopPropagation()} title="npm">
+                        <Package size={15} />
+                      </a>
+                    )}
+                    <a href={proj.github} target="_blank" rel="noopener noreferrer"
+                      className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-white transition-colors"
+                      title="GitHub">
+                      <Code2 size={15} />
+                    </a>
+                  </div>
+                </div>
+
+                <p className="text-[var(--text-secondary)] font-['DM_Sans'] text-sm leading-relaxed">
+                  {proj.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mt-auto">
+                  {proj.tags.map(tag => (
+                    <span key={tag} className="px-2.5 py-1 rounded-md text-xs font-['DM_Mono']"
+                      style={{ background: `${proj.color}12`, border: `1px solid ${proj.color}25`, color: proj.color }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
 
         {/* Featured repo */}
         {!loading && topRepo && (
