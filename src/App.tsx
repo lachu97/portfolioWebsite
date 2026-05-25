@@ -14,11 +14,13 @@ import Projects from './components/sections/Projects';
 import Stats from './components/sections/Stats';
 import Contact from './components/sections/Contact';
 import { CONFIG } from './constants';
+import ResumePopup from './components/ui/ResumePopup';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [commandOpen, setCommandOpen] = useState(false);
   const progress = useScrollProgress();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -34,6 +36,26 @@ export default function App() {
   useEffect(() => {
     document.title = `${CONFIG.name} — ${CONFIG.title}`;
   }, []);
+
+  useEffect(() => {
+    if (loading) return;
+    if (sessionStorage.getItem('resume_popup_shown')) return;
+    const el = document.querySelector('#stack');
+    if (!el) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          timer = setTimeout(() => setShowPopup(true), 600);
+          sessionStorage.setItem('resume_popup_shown', '1');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => { observer.disconnect(); clearTimeout(timer); };
+  }, [loading]);
 
   return (
     <>
@@ -66,6 +88,7 @@ export default function App() {
             <Contact />
           </main>
           <Footer />
+          <ResumePopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
         </div>
       )}
     </>

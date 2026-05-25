@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from '../../hooks';
 import { TECH_STACK } from '../../constants';
 import TiltCard from '../ui/TiltCard';
@@ -7,6 +8,7 @@ import {
   SiRedux, SiReactquery, SiTailwindcss,
   SiNodedotjs, SiFastapi, SiPython, SiPostgresql, SiGraphql,
   SiDocker, SiFirebase, SiSentry, SiGithubactions, SiFastlane, SiJest,
+  SiClaude, SiOpenai,
 } from 'react-icons/si';
 import type { IconType } from 'react-icons';
 
@@ -15,10 +17,12 @@ const ICON_MAP: Record<string, IconType> = {
   SiRedux, SiReactquery, SiTailwindcss,
   SiNodedotjs, SiFastapi, SiPython, SiPostgresql, SiGraphql,
   SiDocker, SiFirebase, SiSentry, SiGithubactions, SiFastlane, SiJest,
+  SiClaude, SiOpenai,
 };
 
 export default function TechStack() {
   const { ref, inView } = useInView(0.1);
+  const [hovered, setHovered] = useState<string | null>(null);
 
   const anim = (delay: number) => ({
     initial: { opacity: 0, y: 30 },
@@ -56,6 +60,10 @@ export default function TechStack() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                       transition={{ duration: 0.4, delay: catIdx * 0.05 + i * 0.04 + 0.2, ease: [0.16, 1, 0.3, 1] as any }}
+                      className="relative"
+                      style={{ overflow: 'visible' }}
+                      onMouseEnter={() => setHovered(`${category}-${tech.name}`)}
+                      onMouseLeave={() => setHovered(null)}
                     >
                       <TiltCard
                         className="gradient-border-card p-5 flex flex-col items-center gap-3 cursor-default group"
@@ -71,13 +79,48 @@ export default function TechStack() {
                       >
                         {Icon
                           ? <Icon size={36} style={{ color: tech.color }} />
-                          : <span style={{ color: tech.color, fontSize: '1.6rem', fontFamily: 'DM Mono, monospace', fontWeight: 700 }}>{tech.icon}</span>
+                          : <span style={{ color: tech.color, fontSize: '1.2rem', fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>{tech.name.slice(0, 2).toUpperCase()}</span>
                         }
                       </div>
                       <span className="font-['DM_Sans'] text-sm font-500 text-[var(--text-secondary)] group-hover:text-white transition-colors text-center leading-tight">
                         {tech.name}
                       </span>
                       </TiltCard>
+
+                      <AnimatePresence>
+                        {hovered === `${category}-${tech.name}` && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-[100] w-52 pointer-events-none"
+                          >
+                            <div
+                              className="rounded-xl px-3 py-2.5"
+                              style={{
+                                background: 'rgba(10,15,30,0.97)',
+                                border: `1px solid ${tech.color}40`,
+                                boxShadow: `0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px ${tech.color}15`,
+                                backdropFilter: 'blur(16px)',
+                              }}
+                            >
+                              <div
+                                className="h-[2px] rounded-full mb-2"
+                                style={{ background: `linear-gradient(to right, ${tech.color}, transparent)` }}
+                              />
+                              <p className="font-['DM_Sans'] text-xs text-[var(--text-secondary)] leading-relaxed">
+                                {tech.description}
+                              </p>
+                            </div>
+                            {/* Arrow */}
+                            <div
+                              className="w-2.5 h-2.5 rotate-45 mx-auto -mt-[5px]"
+                              style={{ background: 'rgba(10,15,30,0.97)', border: `1px solid ${tech.color}40`, borderTop: 'none', borderLeft: 'none' }}
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </motion.div>
                   );
                 })}
