@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, Briefcase } from 'lucide-react';
 
 interface FloatingActionsProps {
   popupDismissed: boolean;
@@ -37,7 +37,7 @@ export default function FloatingActions({ popupDismissed, onOpenPopup }: Floatin
       className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end gap-2.5"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
-      {/* Pill + tooltip group */}
+      {/* Open to Work — desktop: pill + tooltip / mobile: icon button */}
       <AnimatePresence>
         {popupDismissed && scrolled && (
           <motion.div
@@ -48,35 +48,45 @@ export default function FloatingActions({ popupDismissed, onOpenPopup }: Floatin
             transition={{ duration: 0.26, ease: EASE }}
             className="flex flex-col items-end gap-1.5"
           >
-            {/* Tooltip — always visible, fades in after pill */}
-            <motion.div
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 0.85, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.18, ease: EASE }}
-              style={TOOLTIP_STYLE}
-              className="px-2.5 py-1.5 rounded-lg pointer-events-none"
-            >
-              {/* Arrow pointing down toward pill */}
-              <div
-                className="absolute left-1/2 -translate-x-1/2 bottom-[-5px] w-2 h-2 rotate-45"
-                style={{ background: 'rgba(12,16,32,0.95)', borderRight: '1px solid rgba(99,102,241,0.35)', borderBottom: '1px solid rgba(99,102,241,0.35)' }}
-              />
-              <p className="font-['DM_Mono'] text-sm text-white/80 whitespace-nowrap leading-none">
-                Psst — worth a look&nbsp;👀
-              </p>
-            </motion.div>
+            {/* Desktop: tooltip + pill */}
+            <div className="hidden sm:flex flex-col items-end gap-1.5">
+              <motion.div
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 0.85, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.18, ease: EASE }}
+                style={TOOLTIP_STYLE}
+                className="relative px-2.5 py-1.5 rounded-lg pointer-events-none"
+              >
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 bottom-[-5px] w-2 h-2 rotate-45"
+                  style={{ background: 'rgba(12,16,32,0.95)', borderRight: '1px solid rgba(99,102,241,0.35)', borderBottom: '1px solid rgba(99,102,241,0.35)' }}
+                />
+                <p className="font-['DM_Mono'] text-sm text-white/80 whitespace-nowrap leading-none">
+                  Psst — worth a look&nbsp;👀
+                </p>
+              </motion.div>
+              <button
+                onClick={onOpenPopup}
+                style={FAB_STYLE}
+                className="flex items-center gap-2 px-4 py-3 rounded-xl min-h-[44px] hover:border-indigo-400/70 active:scale-95 transition-all duration-200"
+                aria-label="Open to opportunities"
+              >
+                <span className="slow-pulse w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true" />
+                <span className="font-['DM_Mono'] text-[11px] tracking-wide whitespace-nowrap text-white">
+                  Open to Work
+                </span>
+              </button>
+            </div>
 
-            {/* Pill button */}
+            {/* Mobile: compact icon-only button with green dot badge */}
             <button
               onClick={onOpenPopup}
               style={FAB_STYLE}
-              className="flex items-center gap-2 px-4 py-3 rounded-xl min-h-[44px] hover:border-indigo-400/70 active:scale-95 transition-all duration-200"
+              className="relative flex sm:hidden items-center justify-center w-12 h-12 rounded-xl text-white active:scale-95 transition-all duration-200"
               aria-label="Open to opportunities"
             >
-              <span className="slow-pulse w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true" />
-              <span className="font-['DM_Mono'] text-[11px] tracking-wide whitespace-nowrap text-white">
-                Open to Work
-              </span>
+              <Briefcase size={18} strokeWidth={1.8} />
+              <span className="slow-pulse absolute top-2 right-2 w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
             </button>
           </motion.div>
         )}
