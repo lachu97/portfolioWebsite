@@ -17,6 +17,8 @@ import Contact from './components/sections/Contact';
 import { CONFIG } from './constants';
 import ResumePopup from './components/ui/ResumePopup';
 import MobileResumeSheet from './components/ui/MobileResumeSheet';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import FloatingActions from './components/ui/FloatingActions';
 
 export default function App() {
@@ -109,6 +111,8 @@ export default function App() {
           />
         </div>
       )}
+      <Analytics />
+      <SpeedInsights />
     </>
   );
 }
