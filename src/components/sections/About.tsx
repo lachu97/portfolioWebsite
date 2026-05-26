@@ -19,7 +19,7 @@ export default function About() {
   const highlights = [
     { icon: MapPin,        text: CONFIG.location,          label: 'Based in' },
     { icon: Briefcase,     text: '4+ years',               label: 'Experience' },
-    { icon: GraduationCap, text: 'B.Tech+M.Tech @ IIITDM', label: 'Education' },
+    { icon: GraduationCap, text: 'IIITDM Kancheepuram', label: 'Education' },
     { icon: Heart,         text: 'Mobile Performance',     label: 'Passionate about' },
   ];
 
@@ -37,7 +37,7 @@ export default function About() {
             <span className="font-['DM_Mono'] text-xs text-indigo-400 uppercase tracking-widest">01 — About</span>
             <div className="h-px flex-1 max-w-[60px] bg-indigo-500/30" />
           </div>
-          <h2 className="font-['Syne'] font-extrabold text-4xl md:text-5xl text-white">
+          <h2 className="font-['Syne'] font-extrabold text-3xl sm:text-4xl md:text-5xl text-white">
             Built for<span className="text-gradient"> mobile performance</span>
           </h2>
         </motion.div>
@@ -62,9 +62,9 @@ export default function About() {
                   <div className="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 shrink-0">
                     <Icon size={13} className="text-indigo-400" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-[10px] font-['DM_Mono'] text-[var(--text-muted)] mb-0.5 uppercase tracking-wide">{label}</div>
-                    <div className="text-sm font-['DM_Sans'] font-medium text-white">{text}</div>
+                    <div className="text-sm font-['DM_Sans'] font-medium text-white break-words">{text}</div>
                   </div>
                 </div>
               ))}
