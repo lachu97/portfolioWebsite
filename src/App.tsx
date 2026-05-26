@@ -42,7 +42,6 @@ export default function App() {
 
   useEffect(() => {
     if (loading) return;
-    if (sessionStorage.getItem('resume_popup_shown')) return;
     const el = document.querySelector('#stack');
     if (!el) return;
     let timer: ReturnType<typeof setTimeout>;
@@ -50,7 +49,6 @@ export default function App() {
       ([entry]) => {
         if (entry.isIntersecting) {
           timer = setTimeout(() => setShowPopup(true), 600);
-          sessionStorage.setItem('resume_popup_shown', '1');
           observer.disconnect();
         }
       },
