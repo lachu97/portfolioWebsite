@@ -134,7 +134,7 @@ export default function ResumePopup({ isOpen, onClose }: ResumePopupProps) {
           />
 
           {/* Centering shell — pointer-events-none so clicks fall through to backdrop */}
-          <div className="fixed inset-0 z-[201] flex items-center justify-center p-4 pointer-events-none">
+          <div className="fixed inset-0 z-[201] flex items-center justify-center p-3 sm:p-4 pointer-events-none overflow-y-auto">
 
             {/* Ambient orb — purely decorative */}
             {!prefersReduced && (
@@ -164,7 +164,7 @@ export default function ResumePopup({ isOpen, onClose }: ResumePopupProps) {
               {...cardMotion}
               transition={{ duration: 0.3, ease: EASE }}
               onAnimationComplete={() => setContentVisible(true)}
-              className="relative pointer-events-auto w-full max-w-xl"
+              className="relative pointer-events-auto w-full max-w-xl my-auto"
               style={{ perspective: 1100 }}
             >
               {/* Parallax tilt layer */}
@@ -188,7 +188,7 @@ export default function ResumePopup({ isOpen, onClose }: ResumePopupProps) {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="resume-modal-title"
-                    className="relative rounded-[25px] px-8 pt-8 pb-7 overflow-hidden"
+                    className="relative rounded-[25px] px-5 pt-6 pb-5 sm:px-8 sm:pt-8 sm:pb-7 overflow-hidden"
                     style={{
                       background: 'rgba(8,12,22,0.86)',
                       backdropFilter: 'blur(22px)',
@@ -227,7 +227,7 @@ export default function ResumePopup({ isOpen, onClose }: ResumePopupProps) {
 
                       <h2
                         id="resume-modal-title"
-                        className="font-['Syne'] text-[1.8rem] font-extrabold leading-[1.12] tracking-[-0.02em] text-white mb-2.5"
+                        className="font-['Syne'] text-[1.4rem] sm:text-[1.8rem] font-extrabold leading-[1.12] tracking-[-0.02em] text-white mb-2.5"
                       >
                         Open to{' '}
                         <span
@@ -291,7 +291,7 @@ export default function ResumePopup({ isOpen, onClose }: ResumePopupProps) {
                     </p>
 
                     {/* ── CTAs ────────────────────────────────── */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
                       <motion.button
                         onClick={handleDownload}
                         whileHover={{ scale: 1.02, boxShadow: '0 12px 32px rgba(99,102,241,0.35)' }}

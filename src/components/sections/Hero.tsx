@@ -45,14 +45,12 @@ const FLOATING_SKILLS_DESKTOP = [
   { icon: SiGraphql,    label: 'GraphQL',      color: '#e535ab', right: '10%',top: '27%', dur: 14,   delay: 2.5 },
 ];
 
-// Mobile: 6 badges at top/bottom edges so they don't block centered content
+// Mobile: 4 corner badges only — center badges cause horizontal overlap on small screens
 const FLOATING_SKILLS_MOBILE = [
-  { icon: SiReact,      label: 'React Native', color: '#61dafb', left: '4%',  top: '7%',    dur: 7,  delay: 0 },
-  { icon: SiTypescript, label: 'TypeScript',   color: '#3178c6', left: '50%', top: '5%',    dur: 9,  delay: 0.8 },
-  { icon: SiSwift,      label: 'Swift',        color: '#f05138', right: '4%', top: '7%',    dur: 8,  delay: 0.4 },
-  { icon: SiAndroid,    label: 'Android',      color: '#3ddc84', left: '4%',  bottom: '10%',dur: 10, delay: 1.2 },
-  { icon: SiKotlin,     label: 'Kotlin',       color: '#7f52ff', left: '50%', bottom: '8%', dur: 11, delay: 0.6 },
-  { icon: SiDocker,     label: 'Docker',       color: '#2496ed', right: '4%', bottom: '10%',dur: 9,  delay: 1.6 },
+  { icon: SiReact,   label: 'React Native', color: '#61dafb', left: '2%',  top: '5%',    dur: 7,  delay: 0 },
+  { icon: SiSwift,   label: 'Swift',        color: '#f05138', right: '2%', top: '5%',    dur: 8,  delay: 0.4 },
+  { icon: SiAndroid, label: 'Android',      color: '#3ddc84', left: '2%',  bottom: '9%', dur: 10, delay: 1.2 },
+  { icon: SiDocker,  label: 'Docker',       color: '#2496ed', right: '2%', bottom: '9%', dur: 9,  delay: 1.6 },
 ];
 
 function SkillBadge({ Icon, label, color, dur, delay, pos }: {

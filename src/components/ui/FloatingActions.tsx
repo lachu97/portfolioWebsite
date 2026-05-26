@@ -34,8 +34,8 @@ export default function FloatingActions({ popupDismissed, onOpenPopup }: Floatin
 
   return (
     <div
-      className="fixed right-4 sm:right-6 z-[100] flex flex-col items-end gap-2.5"
-      style={{ top: '58%', transform: 'translateY(-50%)' }}
+      className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end gap-2.5"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
       {/* Pill + tooltip group */}
       <AnimatePresence>
