@@ -1,24 +1,29 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { TypeAnimation } from 'react-type-animation';
-import { ArrowDown, Code2, Link2, Mail, Sparkles, ChevronRight, Smartphone, Zap, Shield, Clock } from 'lucide-react';
+import { ArrowDown, Code2, Link2, Mail, ChevronRight } from 'lucide-react';
 import { CONFIG } from '../../constants';
 import { useMousePosition } from '../../hooks';
 
-const METRICS = [
-  { icon: Smartphone, value: '100K+', label: 'App Installs' },
-  { icon: Shield,     value: '99.8%', label: 'Crash-free' },
-  { icon: Zap,        value: '~35%',  label: 'Faster JS Thread' },
-  { icon: Clock,      value: '4 Yrs', label: 'Mobile Experience' },
+const ORBS = [
+  { width: 600, height: 600, color: 'rgba(99,102,241,0.14)',  top: '-10%', left: '-15%',  dur: 14, x: [0, 60, -30, 0], y: [0, -40, 30, 0] },
+  { width: 500, height: 500, color: 'rgba(139,92,246,0.10)',  top: '10%',  right: '-10%', dur: 18, x: [0, -50, 20, 0], y: [0, 30, -50, 0] },
+  { width: 400, height: 400, color: 'rgba(6,182,212,0.06)',   bottom: '5%',left: '30%',   dur: 22, x: [0, 40, -60, 0], y: [0, -30, 20, 0] },
 ];
 
-const ORBS = [
-  { width: 600, height: 600, color: 'rgba(99,102,241,0.18)',  top: '-10%', left: '-15%',   dur: 14, x: [0, 60, -30, 0],  y: [0, -40, 30, 0]  },
-  { width: 500, height: 500, color: 'rgba(139,92,246,0.14)',  top: '10%',  right: '-10%',  dur: 18, x: [0, -50, 20, 0],  y: [0, 30, -50, 0]  },
-  { width: 400, height: 400, color: 'rgba(6,182,212,0.10)',   bottom: '5%',left: '30%',    dur: 22, x: [0, 40, -60, 0],  y: [0, -30, 20, 0]  },
-  { width: 350, height: 350, color: 'rgba(245,158,11,0.07)',  top: '40%',  left: '10%',    dur: 16, x: [0, -30, 50, 0],  y: [0, 40, -30, 0]  },
-  { width: 300, height: 300, color: 'rgba(236,72,153,0.07)',  bottom:'20%',right:'15%',    dur: 20, x: [0, 30, -20, 0],  y: [0, -20, 40, 0]  },
+const METRICS = [
+  { value: '100K+', label: 'Installs' },
+  { value: '99.8%', label: 'Crash-Free' },
+  { value: '~35%',  label: 'Faster JS' },
+  { value: '4 yrs', label: 'Mobile' },
 ];
+
+const SOCIALS = [
+  { href: `https://github.com/${CONFIG.GITHUB_USERNAME}`, icon: Code2, label: 'GitHub' },
+  { href: CONFIG.LINKEDIN_URL, icon: Link2, label: 'LinkedIn' },
+  { href: `mailto:${CONFIG.EMAIL}`, icon: Mail, label: 'Email' },
+];
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 export default function Hero() {
   const { x, y } = useMousePosition();
@@ -27,16 +32,12 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
   const translateY = useTransform(scrollY, [0, 400], [0, 80]);
 
-  const handleScrollDown = () => {
-    document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <section ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* Cursor glow */}
-      <div className="cursor-glow" style={{ left: x, top: y, opacity: 0.7 }} />
+      {/* Cursor glow — hidden on touch via CSS */}
+      <div className="cursor-glow" style={{ left: x, top: y, opacity: 0.55 }} />
 
-      {/* Animated gradient orbs */}
+      {/* 3 ambient orbs — reduced opacity, 60px blur (perf) */}
       {ORBS.map((orb, i) => (
         <motion.div
           key={i}
@@ -45,9 +46,9 @@ export default function Hero() {
             width: orb.width,
             height: orb.height,
             background: orb.color,
-            filter: 'blur(80px)',
-            top: orb.top,
-            left: orb.left,
+            filter: 'blur(60px)',
+            top: (orb as any).top,
+            left: (orb as any).left,
             right: (orb as any).right,
             bottom: (orb as any).bottom,
           }}
@@ -56,65 +57,31 @@ export default function Hero() {
         />
       ))}
 
-      {/* Grid pattern */}
-      <div className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(99,102,241,0.8) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.8) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px'
-        }}
-      />
-
-      {/* Floating particles */}
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: Math.random() * 3 + 1,
-            height: Math.random() * 3 + 1,
-            background: i % 3 === 0 ? '#6366f1' : i % 3 === 1 ? '#8b5cf6' : '#06b6d4',
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            opacity: Math.random() * 0.6 + 0.2,
-          }}
-          animate={{ y: [0, -30, 0], opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: Math.random() * 4 + 3, delay: Math.random() * 4, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
-
       <motion.div
         style={{ opacity, y: translateY }}
-        className="relative z-10 max-w-5xl mx-auto px-6 text-center"
+        className="relative z-10 w-full max-w-4xl mx-auto px-5 sm:px-6 text-center"
       >
-        {/* Badge */}
+        {/* Status badge — Group 1 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-[rgba(99,102,241,0.3)] mb-8"
+          transition={{ duration: 0.36, delay: 0, ease: EASE }}
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass border border-[rgba(99,102,241,0.22)] mb-9 sm:mb-10"
         >
-          <Sparkles size={12} className="text-indigo-400 animate-pulse" />
-          <span className="text-xs font-['DM_Mono'] text-[var(--text-secondary)]">
-            {CONFIG.availableForWork ? (
-              <>
-                <span className="inline-block w-2 h-2 rounded-full bg-green-400 mr-2 animate-pulse" />
-                Available for new opportunities
-              </>
-            ) : 'Currently working at IntuitionX'}
+          <span className="slow-pulse w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true" />
+          <span className="text-[11px] font-['DM_Mono'] text-[var(--text-secondary)] tracking-wide">
+            {CONFIG.availableForWork ? 'Available for new opportunities' : 'Currently at IntuitionX'}
           </span>
         </motion.div>
 
-        {/* Name */}
+        {/* Name heading — Group 1, responsive size */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-4"
+          transition={{ duration: 0.48, delay: 0.05, ease: EASE }}
+          className="mb-5"
         >
-          <h1 className="font-['Syne'] font-800 text-6xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight text-white">
+          <h1 className="font-['Syne'] font-extrabold text-[2.8rem] sm:text-6xl md:text-[5.5rem] leading-[0.93] tracking-[-0.03em] text-white">
             {CONFIG.name.split(' ').map((word, i) => (
               <span key={word} className={i === 1 ? 'text-gradient block' : 'block'}>
                 {word}
@@ -123,125 +90,106 @@ export default function Hero() {
           </h1>
         </motion.div>
 
-        {/* Animated role */}
+        {/* Static role — Group 2 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.25 }}
-          className="mb-6"
+          transition={{ duration: 0.36, delay: 0.16, ease: EASE }}
+          className="mb-4"
         >
-          <div className="inline-flex items-center gap-2 font-['DM_Mono'] text-lg md:text-xl text-[var(--text-secondary)]">
-            <span className="text-indigo-400">{'>'}</span>
-            <TypeAnimation
-              sequence={[
-                'React Native Engineer',
-                2000,
-                'iOS & Android Developer',
-                2000,
-                'Mobile Performance Expert',
-                2000,
-                'Kotlin & Swift Native Modules',
-                2000,
-                'Open Source Contributor',
-                2000,
-              ]}
-              wrapper="span"
-              speed={50}
-              repeat={Infinity}
-              className="text-white"
-            />
-            <span className="animate-blink text-indigo-400">_</span>
-          </div>
+          <p className="font-['DM_Mono'] text-xs sm:text-sm text-[var(--text-secondary)] tracking-wide">
+            React Native Engineer&nbsp;&nbsp;·&nbsp;&nbsp;iOS &amp; Android&nbsp;&nbsp;·&nbsp;&nbsp;SDE II
+          </p>
         </motion.div>
 
-        {/* Tagline */}
+        {/* Tagline — Group 2 */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.35 }}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-[var(--text-secondary)] font-['DM_Sans'] font-300 mb-10 leading-relaxed"
+          transition={{ duration: 0.36, delay: 0.2, ease: EASE }}
+          className="max-w-sm sm:max-w-xl mx-auto text-sm sm:text-base text-[var(--text-secondary)] font-['DM_Sans'] font-light mb-10 sm:mb-14 leading-relaxed"
         >
-          {CONFIG.subtitle}
+          Building high-performance mobile systems for Android &amp; iOS.
+          <br className="hidden sm:block" />
+          4 years of production at scale.
         </motion.p>
 
-        {/* CTA buttons */}
+        {/* Metrics — Group 3
+            Mobile: 2×2 grid | Desktop (sm+): horizontal strip with dividers */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-4 mb-10"
+          transition={{ duration: 0.36, delay: 0.28, ease: EASE }}
+          className="grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-y-6 mb-10 sm:mb-12 max-w-[280px] sm:max-w-none mx-auto"
+        >
+          {METRICS.map(({ value, label }, i) => (
+            <div key={label} className="flex items-center justify-center">
+              {i > 0 && (
+                <div className="hidden sm:block w-px h-9 bg-white/[0.07] mx-7 md:mx-9 shrink-0" />
+              )}
+              <div className="flex flex-col items-center gap-1.5">
+                <span className="font-['Syne'] font-extrabold text-white text-xl sm:text-2xl leading-none tracking-tight">
+                  {value}
+                </span>
+                <span className="font-['DM_Mono'] text-[10px] text-[var(--text-muted)] uppercase tracking-[0.14em]">
+                  {label}
+                </span>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* CTAs — Group 3, stack on mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.36, delay: 0.32, ease: EASE }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12 sm:mb-14"
         >
           <motion.button
             onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
-            whileHover={{ scale: 1.05, boxShadow: '0 20px 60px rgba(99,102,241,0.4)' }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-['DM_Sans'] font-500 text-sm transition-all duration-200"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-['DM_Sans'] font-medium text-sm"
           >
             View my work
-            <ChevronRight size={16} />
+            <ChevronRight size={14} strokeWidth={2.2} />
           </motion.button>
 
           <motion.a
             href={`mailto:${CONFIG.EMAIL}`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 px-7 py-3.5 rounded-xl glass border border-[rgba(99,102,241,0.3)] text-white font-['DM_Sans'] font-500 text-sm hover:border-indigo-500/60 transition-all duration-200"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl glass border border-[rgba(99,102,241,0.22)] text-[var(--text-secondary)] font-['DM_Sans'] font-medium text-sm hover:text-white hover:border-indigo-500/45 transition-colors duration-200"
           >
-            <Mail size={16} />
+            <Mail size={14} />
             Get in touch
           </motion.a>
         </motion.div>
 
-        {/* Mobile metrics banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.48 }}
-          className="flex flex-wrap items-center justify-center gap-3 mb-10"
-        >
-          {METRICS.map(({ icon: Icon, value, label }, i) => (
-            <motion.div
-              key={label}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.5 + i * 0.07 }}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl glass border border-[rgba(99,102,241,0.2)] group hover:border-indigo-500/40 transition-all duration-200"
-            >
-              <Icon size={14} className="text-indigo-400 shrink-0" />
-              <span className="font-['Syne'] font-700 text-white text-sm">{value}</span>
-              <span className="font-['DM_Mono'] text-xs text-[var(--text-muted)]">{label}</span>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Social links */}
+        {/* Social links — de-emphasised, Group 3 */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.55 }}
-          className="flex items-center justify-center gap-6"
+          transition={{ delay: 0.4, duration: 0.4 }}
+          className="flex items-center justify-center gap-5"
         >
-          {[
-            { href: `https://github.com/${CONFIG.GITHUB_USERNAME}`, icon: Code2, label: 'GitHub' },
-            { href: CONFIG.LINKEDIN_URL, icon: Link2, label: 'LinkedIn' },
-            { href: `mailto:${CONFIG.EMAIL}`, icon: Mail, label: 'Email' },
-          ].map(({ href, icon: Icon, label }) => (
-            <motion.a
+          {SOCIALS.map(({ href, icon: Icon, label }) => (
+            <a
               key={label}
               href={href}
               target={href.startsWith('http') ? '_blank' : undefined}
               rel="noopener noreferrer"
-              whileHover={{ scale: 1.2, color: '#6366f1' }}
-              className="text-[var(--text-muted)] hover:text-indigo-400 transition-colors duration-200"
               aria-label={label}
+              className="text-[var(--text-muted)] opacity-40 hover:opacity-100 hover:text-[var(--text-primary)] transition-all duration-200 p-1"
             >
-              <Icon size={20} />
-            </motion.a>
+              <Icon size={15} />
+            </a>
           ))}
-
-          <div className="h-px w-24 bg-gradient-to-r from-transparent via-[rgba(99,102,241,0.3)] to-transparent" />
-
-          <span className="font-['DM_Mono'] text-xs text-[var(--text-muted)]">
+          <span className="w-px h-3.5 bg-white/15" aria-hidden="true" />
+          <span className="font-['DM_Mono'] text-[11px] text-[var(--text-muted)] opacity-40 hidden xs:inline">
             {CONFIG.location}
           </span>
         </motion.div>
@@ -249,19 +197,20 @@ export default function Hero() {
 
       {/* Scroll indicator */}
       <motion.button
-        onClick={handleScrollDown}
+        onClick={() => document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--text-muted)] hover:text-indigo-400 transition-colors"
-        whileHover={{ scale: 1.1 }}
+        animate={{ opacity: 0.35 }}
+        transition={{ delay: 0.55 }}
+        whileHover={{ opacity: 0.9 }}
+        className="absolute bottom-8 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--text-muted)] transition-opacity"
+        aria-label="Scroll to about"
       >
-        <span className="font-['DM_Mono'] text-xs">scroll</span>
+        <span className="font-['DM_Mono'] text-[9px] tracking-[0.22em] uppercase">scroll</span>
         <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <ArrowDown size={16} />
+          <ArrowDown size={12} />
         </motion.div>
       </motion.button>
     </section>

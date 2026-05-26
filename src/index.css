@@ -188,6 +188,15 @@
   100% { background-position: 200% center; }
 }
 
+@keyframes slow-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(52,211,153,0.5); }
+  50% { opacity: 0.5; box-shadow: 0 0 8px rgba(52,211,153,0.2); }
+}
+
+.slow-pulse {
+  animation: slow-pulse 3s ease-in-out infinite;
+}
+
 .skeleton {
   background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
   background-size: 200% 100%;
@@ -229,4 +238,46 @@
   filter: blur(80px);
   animation: pulse-glow 4s ease-in-out infinite;
   pointer-events: none;
+}
+
+/* ── Mobile-first & accessibility ─────────────────────────────── */
+
+/* Reduced motion — disable all CSS animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* iOS safe-area bottom padding utility */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 1.5rem);
+}
+
+/* Cursor glow — hidden on touch-primary devices */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* Mobile glass — lighter blur for performance */
+@media (max-width: 639px) {
+  .glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  /* Reduce will-change on gradient cards — saves GPU memory */
+  .gradient-border-card {
+    will-change: auto;
+  }
+}
+
+/* Prevent content from overflowing cards on tiny screens */
+@media (max-width: 400px) {
+  .gradient-border-card {
+    word-break: break-word;
+  }
 }

@@ -14,7 +14,7 @@ export function useGitHubRepos() {
       try {
         setLoading(true);
         const [reposRes, userRes] = await Promise.all([
-          fetch(`https://api.github.com/users/${CONFIG.GITHUB_USERNAME}/repos?sort=stars&per_page=30&type=owner`),
+          fetch(`https://api.github.com/users/${CONFIG.GITHUB_USERNAME}/repos?sort=updated&per_page=30&type=owner`),
           fetch(`https://api.github.com/users/${CONFIG.GITHUB_USERNAME}`),
         ]);
 
@@ -23,7 +23,12 @@ export function useGitHubRepos() {
         const reposData: GitHubRepo[] = await reposRes.json();
         const userData: GitHubUser = await userRes.json();
 
-        setRepos(reposData.filter(r => !r.fork && !r.archived).slice(0, 24));
+        const curated = reposData
+          .filter(r => !r.fork && !r.archived && r.description && r.description.trim().length > 0)
+          .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+          .slice(0, 12);
+
+        setRepos(curated);
         setUser(userData);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch GitHub data');

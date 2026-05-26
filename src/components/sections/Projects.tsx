@@ -98,7 +98,7 @@ function RepoCard({ repo, index, inView }: RepoCardProps) {
 
       {/* Description */}
       <p className="text-[var(--text-secondary)] font-['DM_Sans'] text-xs leading-relaxed flex-1 line-clamp-3">
-        {repo.description || 'No description available.'}
+        {repo.description}
       </p>
 
       {/* Topics */}
@@ -164,8 +164,8 @@ export default function Projects() {
   const topRepo = repos[0];
 
   return (
-    <section id="projects" ref={ref} className="py-32 relative">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="projects" ref={ref} className="py-20 sm:py-32 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}

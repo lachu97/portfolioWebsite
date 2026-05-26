@@ -80,10 +80,10 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" ref={ref} className="py-32 relative">
+    <section id="contact" ref={ref} className="py-20 sm:py-32 relative">
       <div className="orb w-[400px] h-[400px] bg-indigo-600/10 bottom-0 right-0" />
 
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -93,11 +93,11 @@ export default function Contact() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <span className="font-['DM_Mono'] text-xs text-indigo-400 uppercase tracking-widest">07 — Contact</span>
           </div>
-          <h2 className="font-['Syne'] font-800 text-4xl md:text-6xl text-white mb-4">
+          <h2 className="font-['Syne'] font-extrabold text-3xl sm:text-4xl md:text-5xl text-white mb-4">
             Let's build something
             <span className="text-gradient"> great</span>
           </h2>
-          <p className="text-[var(--text-secondary)] font-['DM_Sans'] text-lg max-w-xl mx-auto">
+          <p className="text-[var(--text-secondary)] font-['DM_Sans'] text-base max-w-xl mx-auto">
             Open to React Native / mobile engineering roles, contracts, and interesting open source collaborations.
           </p>
         </motion.div>
