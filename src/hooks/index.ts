@@ -118,6 +118,21 @@ export function useInView(threshold = 0.1) {
   return { ref, inView };
 }
 
+// ── Mobile detection hook ──────────────────────────────────────────────────
+export function useIsMobile(breakpoint = 640) {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < breakpoint : false
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 // ── Magnetic button hook ───────────────────────────────────────────────────
 export function useMagnetic() {
   const ref = useRef<HTMLButtonElement>(null);

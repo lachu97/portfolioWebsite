@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useScrollProgress } from './hooks';
+import { useScrollProgress, useIsMobile } from './hooks';
 import Loader from './components/ui/Loader';
 import CustomCursor from './components/ui/CustomCursor';
 import Navbar from './components/layout/Navbar';
@@ -16,6 +16,7 @@ import Stats from './components/sections/Stats';
 import Contact from './components/sections/Contact';
 import { CONFIG } from './constants';
 import ResumePopup from './components/ui/ResumePopup';
+import MobileResumeSheet from './components/ui/MobileResumeSheet';
 import FloatingActions from './components/ui/FloatingActions';
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
   const progress = useScrollProgress();
   const [showPopup, setShowPopup] = useState(false);
   const [popupDismissed, setPopupDismissed] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -90,10 +92,17 @@ export default function App() {
             <Contact />
           </main>
           <Footer />
-          <ResumePopup
-            isOpen={showPopup}
-            onClose={() => { setShowPopup(false); setPopupDismissed(true); }}
-          />
+          {isMobile ? (
+            <MobileResumeSheet
+              isOpen={showPopup}
+              onClose={() => { setShowPopup(false); setPopupDismissed(true); }}
+            />
+          ) : (
+            <ResumePopup
+              isOpen={showPopup}
+              onClose={() => { setShowPopup(false); setPopupDismissed(true); }}
+            />
+          )}
           <FloatingActions
             popupDismissed={popupDismissed}
             onOpenPopup={() => setShowPopup(true)}
