@@ -26,7 +26,7 @@ export function useGitHubRepos() {
         const curated = reposData
           .filter(r => !r.fork && !r.archived && r.description && r.description.trim().length > 0)
           .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-          .slice(0, 12);
+          .slice(0, 10);
 
         setRepos(curated);
         setUser(userData);

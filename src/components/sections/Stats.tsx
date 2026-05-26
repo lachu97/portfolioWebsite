@@ -89,13 +89,13 @@ export default function Stats() {
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-6 overflow-x-hidden">
           {/* GitHub */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.16, ease: EASE }}
-            className="gradient-border-card p-4 sm:p-6"
+            className="gradient-border-card p-4 sm:p-6 overflow-hidden"
           >
             <div className="flex items-center gap-3 mb-5 sm:mb-6">
               <div className="p-1.5 rounded-lg bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.2)]">
@@ -107,31 +107,31 @@ export default function Stats() {
               </div>
             </div>
 
-            {/* GitHub mini stats */}
-            <div className="grid grid-cols-3 gap-2.5 mb-6">
+            {/* GitHub mini stats — fixed px to avoid rem scaling */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '20px' }}>
               {[
                 { label: 'Repos',     value: user?.public_repos ?? '30+', icon: Code2 },
                 { label: 'Followers', value: user?.followers ?? '—',      icon: TrendingUp },
                 { label: 'Following', value: user?.following ?? '—',      icon: Target },
               ].map(({ label, value, icon: Icon }) => (
-                <div key={label} className="p-3 rounded-xl bg-white/[0.025] border border-white/[0.05] text-center">
-                  <Icon size={12} className="text-indigo-400/60 mx-auto mb-1.5" />
-                  <div className="font-['Syne'] font-bold text-white text-base leading-none">{value}</div>
-                  <div className="font-['DM_Mono'] text-[10px] text-[var(--text-muted)] mt-1">{label}</div>
+                <div key={label} style={{ padding: '10px 4px', borderRadius: '10px', background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                  <Icon size={12} className="text-indigo-400/60 mx-auto" style={{ marginBottom: '6px' }} />
+                  <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#fff', fontSize: '16px', lineHeight: 1 }}>{value}</div>
+                  <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'var(--text-muted)', marginTop: '4px' }}>{label}</div>
                 </div>
               ))}
             </div>
 
-            {/* Contribution calendar — scrollable on mobile */}
-            <div className="rounded-xl">
+            {/* Contribution calendar */}
+            <div>
               <p className="font-['DM_Mono'] text-[11px] text-[var(--text-muted)] mb-3 uppercase tracking-wide">Contribution Graph</p>
-              <div className="w-full overflow-x-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-                <div style={{ minWidth: 460 }}>
+              <div style={{ width: '100%', overflowX: 'auto', overflowY: 'hidden', WebkitOverflowScrolling: 'touch' }}>
+                <div style={{ minWidth: '440px' }}>
                   <GitHubCalendar
                     username={CONFIG.GITHUB_USERNAME}
                     colorScheme="dark"
                     theme={{ dark: ['#0a0f1e', '#1e1b4b', '#3730a3', '#4f46e5', '#818cf8'] }}
-                    style={{ fontFamily: 'DM Mono, monospace', width: '100%' }}
+                    style={{ fontFamily: 'DM Mono, monospace' }}
                     errorMessage="GitHub contribution data unavailable"
                   />
                 </div>
@@ -144,7 +144,7 @@ export default function Stats() {
             initial={{ opacity: 0, x: 24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.22, ease: EASE }}
-            className="gradient-border-card p-4 sm:p-6"
+            className="gradient-border-card p-4 sm:p-6 overflow-hidden"
           >
             <div className="flex items-center justify-between gap-3 mb-5 sm:mb-6">
               <div className="flex items-center gap-3">
