@@ -9,34 +9,43 @@ interface FloatingActionsProps {
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-const FAB_STYLE: React.CSSProperties = {
-  background: 'rgba(18, 24, 46, 0.92)',
-  border: '1px solid rgba(99,102,241,0.45)',
-  boxShadow: '0 4px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.12) inset',
+const FAB: React.CSSProperties = {
+  background: 'linear-gradient(135deg, rgba(30,36,70,0.98), rgba(20,26,54,0.98))',
+  border: '1.5px solid rgba(99,102,241,0.65)',
+  boxShadow: '0 4px 20px rgba(0,0,0,0.6), 0 0 12px rgba(99,102,241,0.25)',
   backdropFilter: 'blur(16px)',
   WebkitBackdropFilter: 'blur(16px)',
 };
 
 const TOOLTIP_STYLE: React.CSSProperties = {
-  background: 'rgba(12, 16, 32, 0.95)',
-  border: '1px solid rgba(99,102,241,0.35)',
-  boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
+  background: 'rgba(12, 16, 32, 0.97)',
+  border: '1px solid rgba(99,102,241,0.4)',
+  boxShadow: '0 2px 12px rgba(0,0,0,0.5)',
 };
 
 export default function FloatingActions({ popupDismissed, onOpenPopup }: FloatingActionsProps) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 320);
+    const onScroll = () => setScrolled(window.scrollY > 200);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Fixed pixel bottom — bypasses 20px base rem scaling
+  const containerStyle: React.CSSProperties = {
+    position: 'fixed',
+    bottom: 'max(24px, env(safe-area-inset-bottom, 24px))',
+    right: '16px',
+    zIndex: 150,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    gap: '10px',
+  };
+
   return (
-    <div
-      className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end gap-2.5"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
-    >
+    <div style={containerStyle}>
       {/* Open to Work — desktop: pill + tooltip / mobile: icon button */}
       <AnimatePresence>
         {popupDismissed && scrolled && (
@@ -46,47 +55,48 @@ export default function FloatingActions({ popupDismissed, onOpenPopup }: Floatin
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.88, y: 8 }}
             transition={{ duration: 0.26, ease: EASE }}
-            className="flex flex-col items-end gap-1.5"
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}
           >
             {/* Desktop: tooltip + pill */}
             <div className="hidden sm:flex flex-col items-end gap-1.5">
               <motion.div
                 initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 0.85, y: 0 }}
+                animate={{ opacity: 0.9, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.18, ease: EASE }}
-                style={TOOLTIP_STYLE}
-                className="relative px-2.5 py-1.5 rounded-lg pointer-events-none"
+                style={{ ...TOOLTIP_STYLE, position: 'relative', padding: '6px 10px', borderRadius: '8px', pointerEvents: 'none' }}
               >
                 <div
-                  className="absolute left-1/2 -translate-x-1/2 bottom-[-5px] w-2 h-2 rotate-45"
-                  style={{ background: 'rgba(12,16,32,0.95)', borderRight: '1px solid rgba(99,102,241,0.35)', borderBottom: '1px solid rgba(99,102,241,0.35)' }}
+                  style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', bottom: '-5px', width: '8px', height: '8px', rotate: '45deg', background: 'rgba(12,16,32,0.97)', borderRight: '1px solid rgba(99,102,241,0.4)', borderBottom: '1px solid rgba(99,102,241,0.4)' }}
                 />
-                <p className="font-['DM_Mono'] text-sm text-white/80 whitespace-nowrap leading-none">
+                <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '13px', color: 'rgba(255,255,255,0.85)', whiteSpace: 'nowrap', lineHeight: 1 }}>
                   Psst — worth a look&nbsp;👀
                 </p>
               </motion.div>
               <button
                 onClick={onOpenPopup}
-                style={FAB_STYLE}
-                className="flex items-center gap-2 px-4 py-3 rounded-xl min-h-[44px] hover:border-indigo-400/70 active:scale-95 transition-all duration-200"
+                style={{ ...FAB, display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '12px', minHeight: '44px', cursor: 'pointer' }}
                 aria-label="Open to opportunities"
               >
-                <span className="slow-pulse w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true" />
-                <span className="font-['DM_Mono'] text-[11px] tracking-wide whitespace-nowrap text-white">
+                <span className="slow-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34d399', flexShrink: 0 }} aria-hidden="true" />
+                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', letterSpacing: '0.06em', whiteSpace: 'nowrap', color: '#fff' }}>
                   Open to Work
                 </span>
               </button>
             </div>
 
-            {/* Mobile: compact icon-only button with green dot badge */}
+            {/* Mobile: icon-only briefcase button */}
             <button
               onClick={onOpenPopup}
-              style={FAB_STYLE}
-              className="relative flex sm:hidden items-center justify-center w-12 h-12 rounded-xl text-white active:scale-95 transition-all duration-200"
+              className="flex sm:hidden"
+              style={{ ...FAB, position: 'relative', width: '48px', height: '48px', borderRadius: '14px', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
               aria-label="Open to opportunities"
             >
-              <Briefcase size={18} strokeWidth={1.8} />
-              <span className="slow-pulse absolute top-2 right-2 w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
+              <Briefcase size={20} strokeWidth={1.8} />
+              <span
+                className="slow-pulse"
+                style={{ position: 'absolute', top: '10px', right: '10px', width: '8px', height: '8px', borderRadius: '50%', background: '#34d399', border: '1.5px solid rgba(8,12,22,0.9)' }}
+                aria-hidden="true"
+              />
             </button>
           </motion.div>
         )}
@@ -104,11 +114,10 @@ export default function FloatingActions({ popupDismissed, onOpenPopup }: Floatin
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.9 }}
-            style={FAB_STYLE}
-            className="flex items-center justify-center w-11 h-11 rounded-xl text-white hover:border-indigo-400/70 transition-colors duration-200"
+            style={{ ...FAB, width: '48px', height: '48px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', cursor: 'pointer' }}
             aria-label="Scroll to top"
           >
-            <ArrowUp size={15} strokeWidth={2.2} />
+            <ArrowUp size={18} strokeWidth={2} />
           </motion.button>
         )}
       </AnimatePresence>
