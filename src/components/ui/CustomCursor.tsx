@@ -1,18 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useSpring } from 'framer-motion';
+
+const MASCOTS = ['🐞', '👾', '🤖', '👻', '🚀', '🦊', '🐸', '🎯', '⚡', '🐛'];
+const randomMascot = () => MASCOTS[Math.floor(Math.random() * MASCOTS.length)];
 
 export default function CustomCursor() {
   const [visible, setVisible] = useState(false);
   const [isPointer, setIsPointer] = useState(false);
+  const mascot = useRef(randomMascot());
 
-  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
-  const cursorX = useSpring(0, springConfig);
-  const cursorY = useSpring(0, springConfig);
+  // Cursor dot — tight spring
+  const cursorX = useSpring(0, { damping: 25, stiffness: 300, mass: 0.5 });
+  const cursorY = useSpring(0, { damping: 25, stiffness: 300, mass: 0.5 });
+
+  // Avatar — very lazy spring, floats behind
+  const avatarX = useSpring(0, { damping: 32, stiffness: 55, mass: 1.4 });
+  const avatarY = useSpring(0, { damping: 32, stiffness: 55, mass: 1.4 });
+
+  // Trail glow — medium lag
   const trailX = useSpring(0, { damping: 35, stiffness: 150, mass: 0.8 });
   const trailY = useSpring(0, { damping: 35, stiffness: 150, mass: 0.8 });
 
   useEffect(() => {
-    // Only on desktop
     if (window.innerWidth < 768) return;
 
     const update = (e: MouseEvent) => {
@@ -20,6 +29,8 @@ export default function CustomCursor() {
       cursorY.set(e.clientY);
       trailX.set(e.clientX);
       trailY.set(e.clientY);
+      avatarX.set(e.clientX);
+      avatarY.set(e.clientY);
       setVisible(true);
     };
 
@@ -45,9 +56,47 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Trail / glow */}
+      {/* Outer div: spring positioning only */}
       <motion.div
-        className="fixed pointer-events-none z-[998] rounded-full"
+        className="fixed pointer-events-none z-[996]"
+        style={{
+          x: avatarX,
+          y: avatarY,
+          translateX: '-50%',
+          translateY: '-50%',
+          opacity: visible ? 1 : 0,
+          transition: 'opacity 0.4s ease',
+        }}
+      >
+        {/* Inner div: idle animation only — isolated from spring y */}
+        <motion.div
+          animate={{ rotate: [-6, 6, -6], y: [0, -4, 0] }}
+          transition={{
+            rotate: { duration: 2.4, repeat: Infinity, ease: 'easeInOut' },
+            y:      { duration: 1.8, repeat: Infinity, ease: 'easeInOut' },
+          }}
+          style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '20px',
+            background: 'rgba(14,18,40,0.85)',
+            border: '1.5px solid rgba(99,102,241,0.55)',
+            boxShadow: '0 0 16px rgba(99,102,241,0.3), 0 2px 10px rgba(0,0,0,0.5)',
+            backdropFilter: 'blur(8px)',
+          }}
+          aria-hidden="true"
+        >
+          {mascot.current}
+        </motion.div>
+      </motion.div>
+
+      {/* Trail glow */}
+      <motion.div
+        className="fixed pointer-events-none z-[997] rounded-full"
         style={{
           x: trailX,
           y: trailY,
@@ -71,9 +120,7 @@ export default function CustomCursor() {
           translateY: '-50%',
           width: isPointer ? 20 : 8,
           height: isPointer ? 20 : 8,
-          background: isPointer
-            ? 'transparent'
-            : 'rgba(99,102,241,0.9)',
+          background: isPointer ? 'transparent' : 'rgba(99,102,241,0.9)',
           border: isPointer ? '2px solid rgba(99,102,241,0.6)' : 'none',
           opacity: visible ? 1 : 0,
           transition: 'width 0.2s ease, height 0.2s ease, background 0.2s ease, opacity 0.3s ease',
