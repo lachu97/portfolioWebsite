@@ -10,6 +10,7 @@ import Hero from './components/sections/Hero';
 import About from './components/sections/About';
 import TechStack from './components/sections/TechStack';
 import Experience from './components/sections/Experience';
+import LiveApps from './components/sections/LiveApps';
 import Projects from './components/sections/Projects';
 import Stats from './components/sections/Stats';
 import Contact from './components/sections/Contact';
@@ -85,6 +86,7 @@ export default function App() {
             <About />
             <TechStack />
             <Experience />
+            <LiveApps />
             <Projects />
             <Stats />
             <Contact />

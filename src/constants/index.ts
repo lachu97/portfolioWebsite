@@ -26,9 +26,55 @@ export const NAV_ITEMS = [
   { label: "About", href: "#about" },
   { label: "Stack", href: "#stack" },
   { label: "Experience", href: "#experience" },
+  { label: "Apps", href: "#apps" },
   { label: "Projects", href: "#projects" },
   { label: "Stats", href: "#stats" },
   { label: "Contact", href: "#contact" },
+];
+
+export const LIVE_APPS = [
+  {
+    name: "IntuitionX",
+    description: "AI-powered equity market intelligence platform with real-time trading signals and portfolio insights.",
+    url: "https://play.google.com/store/apps/details?id=com.intuitionxapp",
+    company: "IntuitionX",
+    tags: ["React Native", "TypeScript", "AI"],
+  },
+  {
+    name: "Tes Magazine",
+    description: "Digital edition of TES (Times Educational Supplement) magazine for educators worldwide.",
+    url: "https://play.google.com/store/apps/details?id=com.magazine.tes",
+    company: "Concentrix",
+    tags: ["React Native", "iOS & Android"],
+  },
+  {
+    name: "My Takeaway",
+    description: "White-label food ordering app for independent restaurants and takeaway businesses.",
+    url: "https://play.google.com/store/search?q=mytakeaway+app&c=apps",
+    company: "Concentrix",
+    tags: ["React Native", "iOS & Android"],
+  },
+  {
+    name: "Digislides",
+    description: "Android digital signage management app for remote content scheduling and multi-device deployment.",
+    url: "https://play.google.com/store/apps/details?id=com.digisolution.digislides",
+    company: "eShakti",
+    tags: ["React Native", "Android"],
+  },
+  {
+    name: "Digislides TV",
+    description: "Android TV companion to Digislides — full-screen media playback and remote playlist sync for display hardware.",
+    url: "https://play.google.com/store/apps/details?id=com.digisolution.tvslides",
+    company: "eShakti",
+    tags: ["React Native", "Android TV"],
+  },
+  {
+    name: "Foodhub",
+    description: "Online food ordering and delivery platform serving 50K+ users across the UK.",
+    url: "https://play.google.com/store/apps/details?id=com.t2s.foodhub",
+    company: "Foodhub",
+    tags: ["React Native", "iOS & Android"],
+  },
 ];
 
 export const SKILLS = {
