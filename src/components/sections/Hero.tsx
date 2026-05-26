@@ -1,6 +1,11 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, Code2, Link2, Mail, ChevronRight } from 'lucide-react';
+import {
+  SiReact, SiTypescript, SiKotlin, SiSwift,
+  SiAndroid, SiDocker, SiNodedotjs, SiPython,
+  SiRedux, SiGraphql,
+} from 'react-icons/si';
 import { CONFIG } from '../../constants';
 import { useMousePosition } from '../../hooks';
 
@@ -24,6 +29,66 @@ const SOCIALS = [
 ];
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+const FLOATING_SKILLS_DESKTOP = [
+  // Left column
+  { icon: SiReact,      label: 'React Native', color: '#61dafb', left: '3%',  top: '18%', dur: 7.5,  delay: 0 },
+  { icon: SiTypescript, label: 'TypeScript',   color: '#3178c6', left: '2%',  top: '40%', dur: 9,    delay: 1.1 },
+  { icon: SiKotlin,     label: 'Kotlin',       color: '#7f52ff', left: '5%',  top: '60%', dur: 11,   delay: 0.6 },
+  { icon: SiNodedotjs,  label: 'Node.js',      color: '#68a063', left: '1%',  top: '78%', dur: 8.5,  delay: 1.8 },
+  { icon: SiRedux,      label: 'Redux',        color: '#764abc', left: '11%', top: '29%', dur: 13,   delay: 2.2 },
+  // Right column
+  { icon: SiSwift,      label: 'Swift',        color: '#f05138', right: '2%', top: '16%', dur: 8,    delay: 1.4 },
+  { icon: SiAndroid,    label: 'Android',      color: '#3ddc84', right: '3%', top: '38%', dur: 10,   delay: 0.4 },
+  { icon: SiPython,     label: 'Python',       color: '#4b8bbe', right: '6%', top: '58%', dur: 9.5,  delay: 1.9 },
+  { icon: SiDocker,     label: 'Docker',       color: '#2496ed', right: '1%', top: '74%', dur: 12,   delay: 0.9 },
+  { icon: SiGraphql,    label: 'GraphQL',      color: '#e535ab', right: '10%',top: '27%', dur: 14,   delay: 2.5 },
+];
+
+// Mobile: 6 badges at top/bottom edges so they don't block centered content
+const FLOATING_SKILLS_MOBILE = [
+  { icon: SiReact,      label: 'React Native', color: '#61dafb', left: '4%',  top: '7%',    dur: 7,  delay: 0 },
+  { icon: SiTypescript, label: 'TypeScript',   color: '#3178c6', left: '50%', top: '5%',    dur: 9,  delay: 0.8 },
+  { icon: SiSwift,      label: 'Swift',        color: '#f05138', right: '4%', top: '7%',    dur: 8,  delay: 0.4 },
+  { icon: SiAndroid,    label: 'Android',      color: '#3ddc84', left: '4%',  bottom: '10%',dur: 10, delay: 1.2 },
+  { icon: SiKotlin,     label: 'Kotlin',       color: '#7f52ff', left: '50%', bottom: '8%', dur: 11, delay: 0.6 },
+  { icon: SiDocker,     label: 'Docker',       color: '#2496ed', right: '4%', bottom: '10%',dur: 9,  delay: 1.6 },
+];
+
+function SkillBadge({ Icon, label, color, dur, delay, pos }: {
+  Icon: React.ComponentType<{ size?: number; color?: string }>;
+  label: string; color: string; dur: number; delay: number;
+  pos: React.CSSProperties;
+}) {
+  return (
+    <motion.div
+      className="absolute pointer-events-none z-[1]"
+      style={{ ...pos }}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1, y: [0, -14, 0], rotate: [-1, 1, -1] }}
+      transition={{
+        opacity: { duration: 0.7, delay: delay + 0.8 },
+        scale:   { duration: 0.7, delay: delay + 0.8 },
+        y:       { duration: dur,       repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror', delay },
+        rotate:  { duration: dur * 1.3, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror', delay: delay + 0.5 },
+      }}
+    >
+      <div
+        className="flex items-center gap-2.5 px-4 py-2 rounded-2xl"
+        style={{
+          background: 'linear-gradient(135deg, rgba(12,18,36,0.85), rgba(8,12,24,0.9))',
+          border: `1px solid ${color}50`,
+          boxShadow: `0 0 16px ${color}20, inset 0 1px 0 rgba(255,255,255,0.06)`,
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+        }}
+      >
+        <Icon size={16} color={color} />
+        <span className="font-['DM_Mono'] text-sm text-white/80 whitespace-nowrap">{label}</span>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Hero() {
   const { x, y } = useMousePosition();
@@ -56,6 +121,20 @@ export default function Hero() {
           transition={{ duration: orb.dur, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
         />
       ))}
+
+      {/* Floating skill badges — desktop (xl+): left/right columns */}
+      <div className="hidden xl:block">
+        {FLOATING_SKILLS_DESKTOP.map(({ icon: Icon, label, color, dur, delay, ...pos }) => (
+          <SkillBadge key={label} Icon={Icon} label={label} color={color} dur={dur} delay={delay} pos={pos} />
+        ))}
+      </div>
+
+      {/* Floating skill badges — mobile/tablet (< xl): top/bottom edges */}
+      <div className="block xl:hidden">
+        {FLOATING_SKILLS_MOBILE.map(({ icon: Icon, label, color, dur, delay, ...pos }) => (
+          <SkillBadge key={label} Icon={Icon} label={label} color={color} dur={dur} delay={delay} pos={pos} />
+        ))}
+      </div>
 
       <motion.div
         style={{ opacity, y: translateY }}
