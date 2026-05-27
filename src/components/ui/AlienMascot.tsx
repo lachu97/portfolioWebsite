@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 
-const W = 52;
-const H = 65;
+const W = 40;
+const H = 50;
 const FLEE_R = 160;
 const CAUGHT_R = 48;
 
