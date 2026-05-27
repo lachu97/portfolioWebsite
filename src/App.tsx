@@ -20,6 +20,7 @@ import MobileResumeSheet from './components/ui/MobileResumeSheet';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import FloatingActions from './components/ui/FloatingActions';
+import AlienMascot from './components/ui/AlienMascot';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -111,6 +112,7 @@ export default function App() {
           />
         </div>
       )}
+      <AlienMascot />
       <Analytics />
       <SpeedInsights />
     </>
